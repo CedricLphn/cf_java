@@ -10,14 +10,15 @@ Permet de lire et de parser le fichier
 public class Reader {
 
     private String filename;
-    private Map<String, String> map = new HashMap<>();
+    private Map<String, int[][]> map = new HashMap<>();
+    private int[] taille = new int[2];
+
 
 
     Reader(String filename) {
 
         // On sauvegarde le nom du fichier
         this.filename = filename;
-        int[] taille = new int[2];
 
         // On tente de lire le fichier
         try {
@@ -34,7 +35,7 @@ public class Reader {
             int count = 0;
 
             do {
-                // On met le contenue de la Xème ligne dans la variable
+                // On met le contenu de la Xème ligne dans la variable
                 line = buffer.readLine();
 
                 // On ne veux pas lire la dernière ligne qui est forcément null
@@ -49,15 +50,22 @@ public class Reader {
                         taille[1] = Integer.parseInt(split[1]);
 
 
-                        System.out.println("Taille détecté : " + split[0]+"x"+split[1]);
-                        System.out.println("x = " + taille[0]);
-                        System.out.println("y = " + taille[1]);
+                        System.out.println("Taille détectée : " + split[0]+"x"+split[1]);
+                        System.out.println("l = " + taille[0]);
+                        System.out.println("H = " + taille[1]);
 
 
                      }else {
                         // Non c'est autre chose
-                        System.out.println(line);
-                        System.out.println(line.indexOf("M"));
+                        if(line.indexOf("M") != 0) {
+                            int[][] coordonnees = {{Integer.parseInt(split[1])}, {Integer.parseInt(split[2])}};
+                            map.put(split[0], coordonnees);
+                        }
+
+                        // Ca ne marche pas
+                        for(String key : map) {
+                            System.out.println(key);
+                        }
                     }
 
                     // on incrémente
@@ -73,5 +81,9 @@ public class Reader {
             // On arrive pas à lire le fichier.
             System.out.println("Erreur lors de la lecture du fichier");
         }
+    }
+
+    public int[] getTaille() {
+        return taille;
     }
 }

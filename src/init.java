@@ -12,6 +12,8 @@ public class init {
      */
 
     private static String MESSAGE_ACCUEIL = "Bienvenue dans le jeu fou du moment: la FOLIE de la tondeuse !!!";
+    private static int[] taille = new int[2];
+
 
     public static void main(String[] args) {
         Welcome();
@@ -41,6 +43,7 @@ public class init {
         On instancie la classe Reader et on passe le chemin renseigné de l'utilisateur
          */
         Reader file = new Reader(folder);
+        taille = file.getTaille();
     }
 
     private static void Welcome() {
