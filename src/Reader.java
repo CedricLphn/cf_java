@@ -77,10 +77,12 @@ public class Reader {
                     count++;
                 }
 
+
             }while (line != null); // On boucle jusqu'à qu'on rencontre une valeur nulle à la fin.
 
             // On affiche le nbr total de ligne
             System.out.println("Nombre total de ligne : " + count);
+            file.close();
 
         }catch (IOException io) {
             // On arrive pas à lire le fichier.

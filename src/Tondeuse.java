@@ -19,7 +19,7 @@ public class Tondeuse {
         this.grille = map;
 
         System.out.println("=== Tondeuse ===");
-        System.out.println(grille);
+        System.out.println("Tondeuse table: "+grille);
 
         // J'explose la grille pour définir la hauteur et la largeur
         String[] explode = grille.get("X").toString().split(",");
@@ -148,20 +148,16 @@ public class Tondeuse {
                         // On vérifie s'il y a un item présent
                         items.isItem(getX(), getY());
 
-                        System.out.println(getX()+" "+ getY());
                     }else if(getOrientation().equals("E") && !items.isObstacle(getX()+1, getY()) ) {
                         setCoord(getX()+ 1, getY());
                         items.isItem(getX(), getY());
-                        System.out.println(getX()+" "+ getY());
 
                     }else if(getOrientation().equals("S")  && !items.isObstacle(getX(), getY()+1) ) {
                         setCoord(getX(), getY()+1);
                         items.isItem(getX(), getY());
-                        System.out.println(getX()+" "+ getY());
                     }else if(getOrientation().equals("W") && !items.isObstacle(getX()-1, getY()) ) {
                         setCoord(getX()-1, getY());
                         items.isItem(getX(), getY());
-                        System.out.println(getX()+" "+ getY());
                     }
 
                 }
@@ -191,6 +187,7 @@ public class Tondeuse {
     public boolean setCoord(int x, int y) {
         String sp = x + "," + y;
         grille.put("T", sp);
+        System.out.println("La tondeuse avance sur " + x+","+y+" (quelle folie !!)");
         return true;
     }
 

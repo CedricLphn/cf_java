@@ -11,7 +11,7 @@ public class Items {
     public void addItem(String id, String coord) {
         // On ajoute dans la map l'item
         this.items.put(id, coord);
-        System.out.println(items);
+        System.out.println("Items table: " +items);
     }
 
     public boolean isItem(int x, int y) {
