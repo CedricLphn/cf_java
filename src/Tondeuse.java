@@ -4,33 +4,179 @@ import java.util.Map;
 public class Tondeuse {
 
 
-    public HashMap<OrientationEnum, int[][]> tondeuse = new HashMap<>();
-
     private Map grille;
-    private static int[] taille = new int[2];
     private static int l;
     private static int L;
-    private int quantity = 0;
+    private Items items = new Items();
 
-    //Items item = new Items();
 
     Tondeuse(Map map) {
+
+        /*
+        On met la Map passée en argument dans la valeur Grille
+         */
 
         this.grille = map;
 
         System.out.println("=== Tondeuse ===");
         System.out.println(grille);
-        String[] explode = grille.get("X").toString().split(",");
-        l = Integer.parseInt(explode[0]);
-        L = Integer.parseInt(explode[1]);
 
+        // J'explose la grille pour définir la hauteur et la largeur
+        String[] explode = grille.get("X").toString().split(",");
+        l = Integer.parseInt(explode[0]); // Correspond à la largeur
+        L = Integer.parseInt(explode[1]); // Correspond à la longueur
+
+        // On affiche
         System.out.println("l = " + l + " L = " + L);
 
-        mvtTondeuse();
+        // On fait une boucle afin d'envoyer seulement les items dans la classe Items
+        for(Object currentkey : grille.keySet()) {
+
+            String cp = currentkey.toString();
+            // On souhaite uniquement les items et les obtacles
+            if(cp.charAt(0) == 'O' || cp.charAt(0) == 'I') {
+                // On ajoute à items;
+                items.addItem(cp, grille.get(cp).toString());
+
+            }
+        }
+
 
     }
 
+    public void run() {
 
+        // On récupère les instructions de la tondeuse
+        String mvt = grille.get("M").toString();
+
+        // on boucle
+        for (int i = 0; i <= mvt.length() - 1; i++) {
+
+            // On va à gauche
+            if (mvt.charAt(i) == 'G') {
+                // On regard l'orientation
+                if (getOrientation().equals("N")) {
+                    // Si c'est au nord, on le positionne à l'ouest
+                    setOrientation("W");
+
+                    System.out.println(getOrientation());
+
+
+                } else if (getOrientation().equals("W")) {
+                    // Si c'est au à l'ouest, on va au sud
+
+                    setOrientation("S");
+
+                    System.out.println(getOrientation());
+
+                } else if (getOrientation().equals("S")) {
+                    // Si c'est au sud, on le positionne à l'est
+
+                    setOrientation("E");
+
+                    System.out.println(getOrientation());
+
+                } else if (getOrientation().equals("E")) {
+                    // Si c'est au l'est, on le positionne au nord
+
+                    setOrientation("N");
+
+                    System.out.println(getOrientation());
+
+                }
+            }
+            else if (mvt.charAt(i) == 'D') {
+                // Sinon c'est à droite
+
+                if (getOrientation().equals("N")) {
+                    // Si c'est au nord, on le position à l'est
+
+                    setOrientation("E");
+
+                    System.out.println(getOrientation());
+
+
+                } else if (getOrientation().equals("E")) {
+                    // Si c'est a l'est, on le position au sud
+
+                    setOrientation("S");
+
+                    System.out.println(getOrientation());
+
+                } else if (getOrientation().equals("S")) {
+
+                    // Si c'est au sud, on le position à l'ouest
+
+
+                    setOrientation("W");
+
+                    System.out.println(getOrientation());
+
+                } else if (getOrientation().equals("W")) {
+
+                    // Si c'est a l'ouest, on le positionne au nord
+
+
+                    setOrientation("N");
+
+                    System.out.println(getOrientation());
+
+                }
+            }else if(mvt.charAt(i) == 'A'){
+                // SINON ON AVAAAANCE
+
+                // On vérifie d'abord si y a pas une collision
+                if(getY() == 1 && getOrientation().equals("N")) {
+                    System.out.println("On peut pas avancer au nord");
+                }else if(getX() == getTaille(0) && getOrientation().equals("E")) {
+                    System.out.println("on peut pas avancer à l'est");
+                }else if(getX() == 1 && getOrientation().equals("W")){
+                    System.out.println("on peut pas avancer à l'ouest");
+                }else if(getY() == getTaille(1) && getOrientation().equals("S")) {
+                    System.out.println("on peut pas avancer le sud");
+
+                }else {
+
+                    // Pas de collision (mur), on check les items/obstacles
+
+                    // Si l'orientation est au nord et qu'il n'y a pas d'obstacle a x et x-1
+                    if(getOrientation().equals("N") && !items.isObstacle(getX(), getY()-1) ) {
+
+                        // On update les coordonnées
+                        setCoord(getX(), getY() -1);
+
+                        // On vérifie s'il y a un item présent
+                        items.isItem(getX(), getY());
+
+                        System.out.println(getX()+" "+ getY());
+                    }else if(getOrientation().equals("E") && !items.isObstacle(getX()+1, getY()) ) {
+                        setCoord(getX()+ 1, getY());
+                        items.isItem(getX(), getY());
+                        System.out.println(getX()+" "+ getY());
+
+                    }else if(getOrientation().equals("S")  && !items.isObstacle(getX(), getY()+1) ) {
+                        setCoord(getX(), getY()+1);
+                        items.isItem(getX(), getY());
+                        System.out.println(getX()+" "+ getY());
+                    }else if(getOrientation().equals("W") && !items.isObstacle(getX()-1, getY()) ) {
+                        setCoord(getX()-1, getY());
+                        items.isItem(getX(), getY());
+                        System.out.println(getX()+" "+ getY());
+                    }
+
+                }
+            }
+
+        }
+
+        System.out.println("La tondeuse se situe aux coordonnées " + getX() + ", " + getY() +" "+ getOrientation());
+
+
+    }
+
+    /*
+    Setter
+     */
     public boolean setOrientation(String orientation) {
 
         grille.put("Y", orientation);
@@ -40,6 +186,17 @@ public class Tondeuse {
     public String getOrientation() {
         return grille.get("Y").toString();
     }
+
+
+    public boolean setCoord(int x, int y) {
+        String sp = x + "," + y;
+        grille.put("T", sp);
+        return true;
+    }
+
+    /*
+    Getters
+     */
 
     public int getX() {
         String[] sp = grille.get("T").toString().split(",");
@@ -51,11 +208,6 @@ public class Tondeuse {
         return Integer.parseInt(sp[1]);
     }
 
-    public boolean setCoord(int x, int y) {
-        String sp = x + "," + y;
-        grille.put("T", sp);
-        return true;
-    }
 
     // 0 = largeur
     // 1 = Hauteur
@@ -64,156 +216,4 @@ public class Tondeuse {
         return Integer.parseInt(sp[key]);
     }
 
-    public boolean isObstacle(int x, int y) {
-
-        for(Object currentkey : grille.keySet()) {
-            String cp = currentkey.toString();
-            String[] split = grille.get(cp.toString()).toString().split(",");
-
-            if(cp.charAt(0) == 'O') {
-                if(Integer.parseInt(split[0]) == x && Integer.parseInt(split[1]) == y) {
-                    if(quantity > 0) {
-                        quantity -=1;
-                        System.out.println("j'utilise mon item");
-                        grille.put(cp, "0,0");
-                        return true;
-                    }
-
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public boolean isItem(int x, int y) {
-        for(Object currentkey : grille.keySet()) {
-            String cp = currentkey.toString();
-            String[] split = grille.get(cp.toString()).toString().split(",");
-
-            if(cp.charAt(0) == 'I') {
-                if(Integer.parseInt(split[0]) == x && Integer.parseInt(split[1]) == y) {
-                    System.out.println("il y a un item par terre");
-                    quantity += 1;
-                    System.out.println("Tu as maintenant "+quantity+" lave vaisselle");
-
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public void mvtTondeuse() {
-
-
-        String[] split_position = grille.get("T").toString().split(",");
-        int x = Integer.parseInt(split_position[0]);
-        int y = Integer.parseInt(split_position[1]);
-
-
-        String mvt = grille.get("M").toString();
-
-
-        for (int i = 0; i <= mvt.length() - 1; i++) {
-            if (mvt.charAt(i) == 'G') {
-                System.out.println("je réitère");
-                if (getOrientation().equals("N")) {
-
-                    setOrientation("W");
-
-                    System.out.println(getOrientation());
-
-
-                } else if (getOrientation().equals("W")) {
-
-                    setOrientation("S");
-
-                    System.out.println(getOrientation());
-
-                } else if (getOrientation().equals("S")) {
-
-                    setOrientation("E");
-
-                    System.out.println(getOrientation());
-
-                } else if (getOrientation().equals("E")) {
-
-                    setOrientation("N");
-
-                    System.out.println(getOrientation());
-
-                }
-            }
-            else if (mvt.charAt(i) == 'D') {
-                System.out.println("je pisse");
-                if (getOrientation().equals("N")) {
-
-                    setOrientation("E");
-
-                    System.out.println(getOrientation());
-
-
-                } else if (getOrientation().equals("E")) {
-
-                    setOrientation("S");
-
-                    System.out.println(getOrientation());
-
-                } else if (getOrientation().equals("S")) {
-
-                    setOrientation("W");
-
-                    System.out.println(getOrientation());
-
-                } else if (getOrientation().equals("W")) {
-
-                    setOrientation("N");
-
-                    System.out.println(getOrientation());
-
-                }
-            }else if(mvt.charAt(i) == 'A'){
-                System.out.println("A detecté");
-
-                if(getY() == 1 && getOrientation().equals("N")) {
-                    System.out.println("On peut pas avancer");
-                }else if(getX() == getTaille(0) && getOrientation().equals("E")) {
-                    System.out.println("on pe pa avancé");
-                }else if(getX() == 1 && getOrientation().equals("W")){
-                    System.out.println("on pe paaaaaaa avancé");
-                }else if(getY() == getTaille(1) && getOrientation().equals("S")) {
-                    System.out.println("on pe paaaalelelaaa avancé");
-
-                }else {
-
-                    if(getOrientation().equals("N") && (isItem(getX(), getY()-1) || !isObstacle(getX(), getY()-1) ) ) {
-
-                        setCoord(getX(), getY() -1);
-                        isItem()
-                        System.out.println(getX()+" "+ getY());
-                    }else if(getOrientation().equals("E") && (isItem(getX()+1, getY()) || !isObstacle(getX()+1, getY()) ) ) {
-                        setCoord(getX()+ 1, getY());
-                        System.out.println(getX()+" "+ getY());
-
-                    }else if(getOrientation().equals("S")  && (isItem(getX(), getY()+1) || !isObstacle(getX(), getY()+1) )) {
-                        setCoord(getX(), getY()+1);
-                        System.out.println(getX()+" "+ getY());
-                    }else if(getOrientation().equals("W") && (isItem(getX()-1, getY()) || !isObstacle(getX()-1, getY()) )) {
-                        setCoord(getX()-1, getY());
-                        System.out.println(getX()+" "+ getY());
-                    }
-
-                }
-            }
-
-        }
-
-
-        System.out.println(grille.get("Y").toString());
-        System.out.println(quantity);
-
-
-    }
 }

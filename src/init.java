@@ -2,17 +2,8 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class init {
-    /*
-    Todo:
-    - Demander le fichier à la personne
-    - Lecture du fichier
-    - Boucler le fichier
-    - Mettre les coordonées dans une map
-    - Executer le mouvement
-    - Afficher les coordonnées finales de la tondeuse
-     */
 
-    private static String MESSAGE_ACCUEIL = "Bienvenue dans le jeu fou du moment: la FOLIE de la tondeuse !!!";
+    private static final String MESSAGE_ACCUEIL = "Bienvenue dans le jeu fou du moment: la FOLIE de la tondeuse !!!";
     private static int[] taille = new int[2];
     private static Map table;
 
@@ -20,16 +11,13 @@ public class init {
     public static void main(String[] args) {
         Welcome();
         readFile();
-        DemarrerLaTondeuse();
-        Execute();
+        try {
+            Tondeuse maTondeuse = new Tondeuse(table);
+            maTondeuse.run();
+        }catch(Exception e){
+            System.out.println("Impossible de démarrer le jeu :(");
+        }
 
-    }
-
-    private static void DemarrerLaTondeuse() {
-        Tondeuse maTondeuse = new Tondeuse(table);
-    }
-
-    private static void Execute() {
     }
 
 
@@ -46,12 +34,18 @@ public class init {
         /*
         On instancie la classe Reader et on passe le chemin renseigné de l'utilisateur
          */
-        Reader file = new Reader("tondeuse.txt");
+        Reader file = new Reader(folder);
         table = file.render();
     }
 
     private static void Welcome() {
         // On affiche le message d'accueil
+        System.out.println(
+                "  ___ _____ ____ ____ _  _ ___    ____ __   ___ ____ _____ ____ _  _ \n" +
+                " / __(  _  (  _ (_  _( \\( / __)  ( ___/__\\ / __(_  _(  _  (  _ ( \\/ )\n" +
+                "( (__ )(_)( )(_) _)(_ )  ( (_-.   )__/(__)( (__  )(  )(_)( )   /\\  / \n" +
+                " \\___(_____(____(____(_)\\_\\___/  (__(__)(__\\___)(__)(_____(_)\\_)(__) \n" +
+                "\n");
         System.out.println(MESSAGE_ACCUEIL);
 
     }

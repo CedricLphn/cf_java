@@ -71,7 +71,6 @@ public class Reader {
                             map.put("M", split[1]);
                         }
 
-                        System.out.println(map);
                     }
 
                     // on incrémente
