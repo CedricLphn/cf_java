@@ -32,6 +32,7 @@ public class Reader {
             String[] split;
             // Variable permettant de compter les nombres de ligne et à définir la position actuelle du buffer
             int count = 0;
+            int item = 0;
 
             do {
                 // On met le contenu de la Xème ligne dans la variable
@@ -55,14 +56,16 @@ public class Reader {
 
                      }else {
                         // Non c'est autre chose
+
+
                         if(line.indexOf("M") != 0) {
                             if(line.indexOf("T") == 0) {
                                 map.put(split[0], split[1]+","+split[2]);
                                 map.put("Y", split[3]);
 
                             }else {
-                                map.put(split[0], split[1]+","+split[2]);
-
+                                map.put(split[0]+item, split[1]+","+split[2]);
+                                item++;
                             }
                         }else {
                             map.put("M", split[1]);

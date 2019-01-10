@@ -10,6 +10,8 @@ public class Tondeuse {
     private static int[] taille = new int[2];
     private static int l;
     private static int L;
+    private int quantity = 0;
+
     //Items item = new Items();
 
     Tondeuse(Map map) {
@@ -62,8 +64,50 @@ public class Tondeuse {
         return Integer.parseInt(sp[key]);
     }
 
+    public boolean isObstacle(int x, int y) {
+
+        for(Object currentkey : grille.keySet()) {
+            String cp = currentkey.toString();
+            String[] split = grille.get(cp.toString()).toString().split(",");
+
+            if(cp.charAt(0) == 'O') {
+                if(Integer.parseInt(split[0]) == x && Integer.parseInt(split[1]) == y) {
+                    if(quantity > 0) {
+                        quantity -=1;
+                        System.out.println("j'utilise mon item");
+                        grille.put(cp, "0,0");
+                        return true;
+                    }
+
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isItem(int x, int y) {
+        for(Object currentkey : grille.keySet()) {
+            String cp = currentkey.toString();
+            String[] split = grille.get(cp.toString()).toString().split(",");
+
+            if(cp.charAt(0) == 'I') {
+                if(Integer.parseInt(split[0]) == x && Integer.parseInt(split[1]) == y) {
+                    System.out.println("il y a un item par terre");
+                    quantity += 1;
+                    System.out.println("Tu as maintenant "+quantity+" lave vaisselle");
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 
     public void mvtTondeuse() {
+
+
         String[] split_position = grille.get("T").toString().split(",");
         int x = Integer.parseInt(split_position[0]);
         int y = Integer.parseInt(split_position[1]);
@@ -143,17 +187,20 @@ public class Tondeuse {
                     System.out.println("on pe paaaalelelaaa avancé");
 
                 }else {
-                    if(getOrientation().equals("N")) {
+
+                    if(getOrientation().equals("N") && (isItem(getX(), getY()-1) || !isObstacle(getX(), getY()-1) ) ) {
+
                         setCoord(getX(), getY() -1);
+                        isItem()
                         System.out.println(getX()+" "+ getY());
-                    }else if(getOrientation().equals("E")) {
+                    }else if(getOrientation().equals("E") && (isItem(getX()+1, getY()) || !isObstacle(getX()+1, getY()) ) ) {
                         setCoord(getX()+ 1, getY());
                         System.out.println(getX()+" "+ getY());
 
-                    }else if(getOrientation().equals("S")) {
+                    }else if(getOrientation().equals("S")  && (isItem(getX(), getY()+1) || !isObstacle(getX(), getY()+1) )) {
                         setCoord(getX(), getY()+1);
                         System.out.println(getX()+" "+ getY());
-                    }else if(getOrientation().equals("W")) {
+                    }else if(getOrientation().equals("W") && (isItem(getX()-1, getY()) || !isObstacle(getX()-1, getY()) )) {
                         setCoord(getX()-1, getY());
                         System.out.println(getX()+" "+ getY());
                     }
@@ -161,42 +208,11 @@ public class Tondeuse {
                 }
             }
 
-//			else if (== "D")
-//			{
-//				if (direction == "N" && y < 20)
-//				{
-//					direction = "E";
-//				}
-//				else if (direction == "E" && y < 20)
-//				{
-//					direction = "S";
-//				}
-//				else if (direction == "S" && y < 20)
-//				{
-//					direction = "W";
-//				}
-//				else if (direction == "W" && y < 20)
-//				{
-//					direction = "N";
-//				}
-//			}*/
-//            }
         }
 
 
-//		// Getter
-//		private HashMap<OrientationEnum, int[][]> getPosTondeuse()
-//		{
-//			return this.tondeuse;
-//		}
-//
-//		// Setter
-//		private void setPosTondeuse(HashMap<OrientationEnum, int [][]> posTondeuse)
-//		{
-//			this.tondeuse = posTondeuse;
-//		}
-
         System.out.println(grille.get("Y").toString());
+        System.out.println(quantity);
 
 
     }
