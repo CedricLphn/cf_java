@@ -1,20 +1,54 @@
 import java.util.HashMap;
+import java.util.Map;
 
 public class Tondeuse {
-	initPosTondeuse();
-	mvtTondeuse();
-		
-		
+
 		
 		public HashMap<OrientationEnum, int[][]> tondeuse = new HashMap<>();
+
+        private Map grille;
+        private static int[] taille = new int[2];
+        private static int l;
+        private static int L;
+        //Items item = new Items();
+
+        Tondeuse(Map map) {
+
+            this.grille = map;
+
+            System.out.println("=== Tondeuse ===");
+            System.out.println(grille);
+            String[] explode = grille.get("X").toString().split(",");
+            l = Integer.parseInt(explode[0]);
+            L = Integer.parseInt(explode[1]);
+
+            System.out.println("l = " + l+" L = "+L);
+
+            mvtTondeuse();
+
+        }
 		
 		
-		public void mvtTondeuse(OrientationEnum, int x, int y)
-		{
-			instruction
-			getPosTondeuse();
-			 
-			/*if( == "G") {
+
+
+
+
+		public void mvtTondeuse() {
+            String[] split_position = grille.get("T").toString().split(",");
+            int x = Integer.parseInt(split_position[0]);
+            int y = Integer.parseInt(split_position[1]);
+            String orientation = split_position[2];
+
+            String mvt = grille.get("M").toString();
+
+            System.out.println(orientation);
+
+        }
+
+
+ 			initPosTondeuse();
+	mvtTondeuse();
+			if( == "G") {
 				if (direction == "N" && y > 1)
 				{
 					direction = "W";
@@ -51,18 +85,20 @@ public class Tondeuse {
 					direction = "N";
 				}
 			}
-		}*/
-		
+		}
+
+
+
 		// Getter
 		private HashMap<OrientationEnum, int[][]> getPosTondeuse()
 		{
 			return this.tondeuse;
 		}
-	
+
 		// Setter
 		private void setPosTondeuse(HashMap<OrientationEnum, int [][]> posTondeuse)
 		{
 			this.tondeuse = posTondeuse;
 		}
-	}
+	}*/
 }

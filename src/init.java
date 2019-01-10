@@ -26,7 +26,7 @@ public class init {
     }
 
     private static void DemarrerLaTondeuse() {
-        TondeuseManager maTondeuse = new TondeuseManager(table);
+        Tondeuse maTondeuse = new Tondeuse(table);
     }
 
     private static void Execute() {
@@ -46,7 +46,7 @@ public class init {
         /*
         On instancie la classe Reader et on passe le chemin renseigné de l'utilisateur
          */
-        Reader file = new Reader(folder);
+        Reader file = new Reader("tondeuse.txt");
         table = file.render();
     }
 

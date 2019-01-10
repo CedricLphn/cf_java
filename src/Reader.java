@@ -56,7 +56,13 @@ public class Reader {
                      }else {
                         // Non c'est autre chose
                         if(line.indexOf("M") != 0) {
-                            map.put(split[0], split[1]+","+split[2]);
+                            if(line.indexOf("T") == 0) {
+                                map.put(split[0], split[1]+","+split[2]+","+split[3]);
+
+                            }else {
+                                map.put(split[0], split[1]+","+split[2]);
+
+                            }
                         }else {
                             map.put("M", split[1]);
                         }

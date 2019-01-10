@@ -21,8 +21,6 @@ public class TondeuseManager {
 
     }
 
-    public static
-
 
 
     public static boolean setTaille(int[] cdn) {

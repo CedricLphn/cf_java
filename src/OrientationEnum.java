@@ -4,6 +4,8 @@ public enum OrientationEnum {
 	 E("Est"),
 	 N("Nord"),
 	 S("Sud");
+
+
 	private String direction;
 	OrientationEnum(String orientation)	
 	{
