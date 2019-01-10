@@ -1,3 +1,4 @@
+import java.util.Map;
 import java.util.Scanner;
 
 public class init {
@@ -13,22 +14,25 @@ public class init {
 
     private static String MESSAGE_ACCUEIL = "Bienvenue dans le jeu fou du moment: la FOLIE de la tondeuse !!!";
     private static int[] taille = new int[2];
+    private static Map table;
 
 
     public static void main(String[] args) {
         Welcome();
         readFile();
-        BouclerLeFichier();
+        DemarrerLaTondeuse();
         Execute();
 
+    }
+
+    private static void DemarrerLaTondeuse() {
+        TondeuseManager maTondeuse = new TondeuseManager(table);
     }
 
     private static void Execute() {
     }
 
-    private static void BouclerLeFichier() {
-        
-    }
+
 
     private static void readFile() {
         /*
@@ -43,7 +47,7 @@ public class init {
         On instancie la classe Reader et on passe le chemin renseigné de l'utilisateur
          */
         Reader file = new Reader(folder);
-        taille = file.getTaille();
+        table = file.render();
     }
 
     private static void Welcome() {

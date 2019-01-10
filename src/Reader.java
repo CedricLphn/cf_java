@@ -10,8 +10,7 @@ Permet de lire et de parser le fichier
 public class Reader {
 
     private String filename;
-    private Map<String, int[][]> map = new HashMap<>();
-    private int[] taille = new int[2];
+    private Map<String, String> map = new HashMap<>();
 
 
 
@@ -46,26 +45,23 @@ public class Reader {
                     // On souhaite savoir si on se trouve à la première ligne
                     if(count == 0) {
                         // Oui ? Alors c'est forcément la taille de la map
-                        taille[0] = Integer.parseInt(split[0]);
-                        taille[1] = Integer.parseInt(split[1]);
+
+                        map.put("X", Integer.parseInt(split[0])+","+Integer.parseInt(split[1]));
+
 
 
                         System.out.println("Taille détectée : " + split[0]+"x"+split[1]);
-                        System.out.println("l = " + taille[0]);
-                        System.out.println("H = " + taille[1]);
 
 
                      }else {
                         // Non c'est autre chose
                         if(line.indexOf("M") != 0) {
-                            int[][] coordonnees = {{Integer.parseInt(split[1])}, {Integer.parseInt(split[2])}};
-                            map.put(split[0], coordonnees);
+                            map.put(split[0], split[1]+","+split[2]);
+                        }else {
+                            map.put("M", split[1]);
                         }
 
-                        // Ca ne marche pas
-                        for(String key : map) {
-                            System.out.println(key);
-                        }
+                        System.out.println(map);
                     }
 
                     // on incrémente
@@ -83,7 +79,8 @@ public class Reader {
         }
     }
 
-    public int[] getTaille() {
-        return taille;
+
+    public Map render() {
+        return this.map;
     }
 }
